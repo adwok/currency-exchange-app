@@ -1,41 +1,74 @@
-import logo from './logo.svg';
 import './App.css';
 
-function MyButton() {
-  return (
-    <button>
-      I'm a button
-    </button>
-  );
-}
-
-export default function MyApp() {
+function CurrencyMenu() {
   return (
     <div>
-      <h1>Welcome to my app</h1>
-      <MyButton />
+      <select>
+        <option value="AUD">Australian Dollar</option>
+        <option value="BGN">Bulgarian Lev</option>
+        <option value="BRL">Brazilian Real</option>
+        <option value="CAD">Canadian Dollar</option>
+        <option value="CHF">Swiss Franc</option>
+        <option value="CNY">Chinese Renminbi Yuan</option>
+        <option value="CZK">Czech Koruna</option>
+        <option value="DKK">Danish Krone</option>
+        <option value="EUR">Euro</option>
+        <option value="GBP">British Pound</option>
+        <option value="HKD">Hong Kong Dollar</option>
+        <option value="HUF">Hungarian Forint</option>
+        <option value="IDR">Indonesian Rupiah</option>
+        <option value="ILS">Israeli New Sheqel</option>
+        <option value="INR">Indian Rupee</option>
+        <option value="ISK">Icelandic Króna</option>
+        <option value="JPY">Japanese Yen</option>
+        <option value="KRW">South Korean Won</option>
+        <option value="MXN">Mexican Peso</option>
+        <option value="MYR">Malaysian Ringgit</option>
+        <option value="NOK">Norwegian Krone</option>
+        <option value="NZD">New Zealand Dollar</option>
+        <option value="PHP">Philippine Peso</option>
+        <option value="PLN">Polish Złoty</option>
+        <option value="RON">Romanian Leu</option>
+        <option value="SEK">Swedish Krona</option>
+        <option value="SGD">Singapore Dollar</option>
+        <option value="THB">Thai Baht</option>
+        <option value="TRY">Turkish Lira</option>
+        <option value="USD">United States Dollar</option>
+        <option value="ZAR">South African Rand</option>
+      </select>
     </div>
   );
 }
-//function App() {
+
+function FirstSelection() {
+  return (
+    <CurrencyMenu />
+  )
+}
+
+function SecondSelection() {
+  return (
+    <CurrencyMenu />
+  )
+}
+
+//function MyButton() {
 //  return (
-//    <div className="App">
-//      <header className="App-header">
-//        <img src={logo} className="App-logo" alt="logo" />
-//        <p>
-//          Edit <code>src/App.js</code> and save to reload.
-//        </p>
-//        <a
-//          className="App-link"
-//          href="https://reactjs.org"
-//          target="_blank"
-//          rel="noopener noreferrer"
-//        >
-//          Learn React
-//        </a>
-//      </header>
-//    </div>
+//    <button>
+//      Reverse
+//    </button>
 //  );
 //}
 
-//export default App;
+export default function MyApp() {
+  return (
+    <div className="text-center">
+      <h1>CURRENCY EXCHANGE APP</h1>
+      <p1>Exchange between</p1>
+      <FirstSelection />
+      <p1>and</p1>
+      <SecondSelection />
+    </div>
+  )
+}
+
