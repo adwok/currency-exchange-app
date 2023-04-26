@@ -1,9 +1,11 @@
 import './App.css';
+import { Component } from 'react';
 
-function CurrencyMenu() {
+function CurrencyMenu(props) {
+  const { handleChange, value } = props;
   return (
     <div>
-      <select>
+      <select onChange={handleChange} value={value}>
         <option value="AUD">Australian Dollar</option>
         <option value="BGN">Bulgarian Lev</option>
         <option value="BRL">Brazilian Real</option>
@@ -40,17 +42,17 @@ function CurrencyMenu() {
   );
 }
 
-function FirstSelection() {
-  return (
-    <CurrencyMenu />
-  )
-}
+//function FirstSelection() {
+//  return (
+//    <CurrencyMenu />
+//  )
+//}
 
-function SecondSelection() {
-  return (
-    <CurrencyMenu />
-  )
-}
+//function SecondSelection() {
+//  return (
+//    <CurrencyMenu />
+//  )
+//}
 
 //function MyButton() {
 //  return (
@@ -60,15 +62,31 @@ function SecondSelection() {
 //  );
 //}
 
-export default function MyApp() {
+class MyApp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      first_currency: 'USD',
+    };
+  }
+}
+
+  handleFirstCurrChange = (event) => {
+    this.setState({ first_currency: event.target.value });
+  }
+
+  handleSecondCurrChange = (event) => {
+    this.setState({ second_currency: event.target.value });
+  }
+
+render (); {
   return (
     <div className="text-center">
       <h1>CURRENCY EXCHANGE APP</h1>
       <p1>Exchange between</p1>
-      <FirstSelection />
+      <CurrencyMenu onChange={this.handleFirstCurrChange} value={this.state.first_currency} />
       <p1>and</p1>
-      <SecondSelection />
+      <CurrencyMenu onChange={this.handleSecondCurrChange} value={this.state.second_currency} />
     </div>
   )
 }
-
