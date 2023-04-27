@@ -2,10 +2,10 @@ import './App.css';
 import { Component } from 'react';
 
 function CurrencyMenu(props) {
-  const { handleChange, value } = props;
+  const { onChange, value } = props;
   return (
     <div>
-      <select onChange={handleChange} value={value}>
+      <select onChange={onChange} value={value}>
         <option value="AUD">Australian Dollar</option>
         <option value="BGN">Bulgarian Lev</option>
         <option value="BRL">Brazilian Real</option>
@@ -67,9 +67,10 @@ class MyApp extends Component {
     super(props);
     this.state = {
       first_currency: 'USD',
+      second_currency: 'EUR',
     };
   }
-}
+
 
   handleFirstCurrChange = (event) => {
     this.setState({ first_currency: event.target.value });
@@ -79,14 +80,17 @@ class MyApp extends Component {
     this.setState({ second_currency: event.target.value });
   }
 
-render (); {
-  return (
-    <div className="text-center">
-      <h1>CURRENCY EXCHANGE APP</h1>
-      <p1>Exchange between</p1>
-      <CurrencyMenu onChange={this.handleFirstCurrChange} value={this.state.first_currency} />
-      <p1>and</p1>
-      <CurrencyMenu onChange={this.handleSecondCurrChange} value={this.state.second_currency} />
-    </div>
-  )
+  render () {
+    return (
+      <div className="text-center">
+        <h1>CURRENCY EXCHANGE APP</h1>
+        <p>Exchange between</p>
+        <CurrencyMenu onChange={this.handleFirstCurrChange} value={this.state.first_currency} />
+        <p>and</p>
+        <CurrencyMenu onChange={this.handleSecondCurrChange} value={this.state.second_currency} />
+      </div>
+    )
+  }
 }
+
+export default MyApp;
