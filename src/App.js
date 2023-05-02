@@ -47,44 +47,87 @@ class MyApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstCurrency: "AUD",
-      secondCurrency: "AUD",
-      rates: { AUD: 1 },
-      firstAmount: "",
-      secondAmount: "",
+      firstCurrency: "GBP",
+      secondCurrency: "EUR",
+      rates: { EUR: 1 },
+      firstAmount: 1,
+      secondAmount: 1,
+      baseCurrency: "NZD",
+      allRates: {},
     };
     this.handleFirstCurrChange = this.handleFirstCurrChange.bind(this);
     this.handleSecondCurrChange = this.handleSecondCurrChange.bind(this);
     this.handleFirstAmountChange = this.handleFirstAmountChange.bind(this);
     this.handleSecondAmountChange = this.handleSecondAmountChange.bind(this);
+    this.handleBaseCurrChange = this.handleBaseCurrChange.bind(this);
   };
 
-  GetRate = () => {
+  componentDidMount () {
+    this.getRate();
+    this.getAllRates();
+  }
+
+  getRate = () => {
     fetch (`https://api.frankfurter.app/latest?from=${this.state.firstCurrency}&to=${this.state.secondCurrency}`)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
-      this.setState({ rates: data.rates });
+      this.setState({
+        rates: data.rates,
+        secondAmount: this.convertBaseToQuote(this.state.firstAmount, data.rates[this.state.secondCurrency]),
+      });
     });
   };
 
+  getAllRates = () => {
+    fetch (`https://api.frankfurter.app/latest?from=${this.state.baseCurrency}`)
+    .then(response => response.json())
+    .then(data => {
+      this.setState({
+        allRates: data.rates,
+      });
+    });
+  };
+
+  convertBaseToQuote = (base, rate) => {
+    return base * rate;
+  }
+
+  convertQuoteToBase = (quote, rate) => {
+    return quote / rate;
+  }
+
   handleFirstCurrChange = (event) => {
-    this.setState({ firstCurrency: event.target.value }, this.GetRate);
-    this.setState({ firstAmount: 1 });
+    this.setState({ firstCurrency: event.target.value }, this.getRate);
+
   };
 
   handleSecondCurrChange = (event) => {
-    this.setState({ secondCurrency: event.target.value }, this.GetRate);
-    this.setState({ firstAmount: 1 });
+    this.setState({ secondCurrency: event.target.value }, this.getRate);
+
   };
 
   handleFirstAmountChange = (event) => {
-    this.setState({});
+    this.setState({
+      firstAmount: event.target.value,
+      secondAmount: this.convertBaseToQuote(event.target.value, this.state.rates[this.state.secondCurrency]),
+    });
   };
 
-  handleSecondAmountChange = (event) => {};
+  handleSecondAmountChange = (event) => {
+    this.setState({
+      secondAmount: event.target.value,
+      firstAmount: this.convertQuoteToBase(event.target.value, this.state.rates[this.state.secondCurrency]),
+    });
+  };
+
+  handleBaseCurrChange = (event) => {
+    this.setState({
+      baseCurrency: event.target.value,
+    }, this.getAllRates);
+  };
 
   render () {
+    console.log(this.state);
     return (
       <div className="text-center">
         <h1>CURRENCY EXCHANGE APP</h1>
@@ -95,7 +138,7 @@ class MyApp extends Component {
           <CurrencyMenu onChange={this.handleSecondCurrChange} value={this.state.secondCurrency} />
         </div>
         <div className="col-12">
-          <span className="mx-3">1 {this.state.firstCurrency} equals {this.state.rates.secondCurrency} {this.state.secondCurrency}</span>
+          <span className="mx-3">1 {this.state.firstCurrency} equals {this.state.rates[this.state.secondCurrency]} {this.state.secondCurrency}</span>
         </div>
         <div className="col-12">
           <span className="mr-3">{this.state.firstCurrency}</span>
@@ -104,6 +147,9 @@ class MyApp extends Component {
           <input value={this.state.secondAmount} onChange={this.handleSecondAmountChange} type="number"/>
           <span className="ml-3">{this.state.secondCurrency}</span>
         </div>
+        <h2>Exchange Rates For</h2>
+        <CurrencyMenu onChange={this.handleBaseCurrChange} value={this.state.baseCurrency} />
+        <ul></ul>
       </div>
     );
   };
