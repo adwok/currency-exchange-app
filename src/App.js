@@ -47,40 +47,63 @@ class MyApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstCurrency: "AUD",
+      firstCurrency: "USD",
       secondCurrency: "AUD",
-      rates: { AUD: 1 },
-      firstAmount: "",
-      secondAmount: "",
+      rates: { AUD: 1.5 },
+      firstAmount: 1,
+      secondAmount: 1.5,
     };
   };
 
-  GetRate = () => {
+  componentDidMount () {
+    this.getRate();
+  }
+
+  getRate = () => {
     fetch (`https://api.frankfurter.app/latest?from=${this.state.firstCurrency}&to=${this.state.secondCurrency}`)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
-      this.setState({ rates: data.rates });
+      this.setState({
+        rates: data.rates,
+        secondAmount: this.convertBaseToQuote(this.state.firstAmount, data.rates[this.state.secondCurrency]),
+      });
     });
   };
 
+  convertBaseToQuote = (base, rate) => {
+    return base * rate;
+  }
+
+  convertQuoteToBase = (quote, rate) => {
+    return quote / rate;
+  }
+
   handleFirstCurrChange = (event) => {
-    this.setState({ firstCurrency: event.target.value }, this.GetRate);
-    this.setState({ firstAmount: 1 });
+    this.setState({ firstCurrency: event.target.value }, this.getRate);
+
   };
 
   handleSecondCurrChange = (event) => {
-    this.setState({ secondCurrency: event.target.value }, this.GetRate);
-    this.setState({ firstAmount: 1 });
+    this.setState({ secondCurrency: event.target.value }, this.getRate);
+
   };
 
   handleFirstAmountChange = (event) => {
-    this.setState({});
+    this.setState({
+      firstAmount: event.target.value,
+      secondAmount: this.convertBaseToQuote(event.target.value, this.state.rates[this.state.secondCurrency]),
+    });
   };
 
-  handleSecondAmountChange = (event) => {};
+  handleSecondAmountChange = (event) => {
+    this.setState({
+      secondAmount: event.target.value,
+      firstAmount: this.convertQuoteToBase(event.target.value, this.state.rates[this.state.secondCurrency]),
+    });
+  };
 
   render () {
+    console.log(this.state);
     return (
       <div className="text-center">
         <h1>CURRENCY EXCHANGE APP</h1>
