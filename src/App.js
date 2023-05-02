@@ -53,6 +53,10 @@ class MyApp extends Component {
       firstAmount: "",
       secondAmount: "",
     };
+    this.handleFirstCurrChange = this.handleFirstCurrChange.bind(this);
+    this.handleSecondCurrChange = this.handleSecondCurrChange.bind(this);
+    this.handleFirstAmountChange = this.handleFirstAmountChange.bind(this);
+    this.handleSecondAmountChange = this.handleSecondAmountChange.bind(this);
   };
 
   GetRate = () => {
