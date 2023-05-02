@@ -74,7 +74,9 @@ class MyApp extends Component {
     this.setState({ firstAmount: 1 });
   };
 
-  handleFirstAmountChange = (event) => {};
+  handleFirstAmountChange = (event) => {
+    this.setState({});
+  };
 
   handleSecondAmountChange = (event) => {};
 
@@ -89,14 +91,14 @@ class MyApp extends Component {
           <CurrencyMenu onChange={this.handleSecondCurrChange} value={this.state.secondCurrency} />
         </div>
         <div className="col-12">
-          <span className="mx-3">1 {this.state.firstCurrency} equals {this.rates[this.secondCurrency]} {this.state.secondCurrency}</span>
+          <span className="mx-3">1 {this.state.firstCurrency} equals {this.state.rates.secondCurrency} {this.state.secondCurrency}</span>
         </div>
         <div className="col-12">
-          <span className="mr-1">{this.state.firstCurrency}</span>
+          <span className="mr-3">{this.state.firstCurrency}</span>
           <input value={this.state.firstAmount} onChange={this.handleFirstAmountChange} type="number"/>
           <span className="mx-3">=</span>
           <input value={this.state.secondAmount} onChange={this.handleSecondAmountChange} type="number"/>
-          <span className="ml-1">{this.state.secondCurrency}</span>
+          <span className="ml-3">{this.state.secondCurrency}</span>
         </div>
       </div>
     );
