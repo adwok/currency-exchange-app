@@ -124,7 +124,13 @@ class MyApp extends Component {
     this.setState({
       baseCurrency: event.target.value,
     }, this.getAllRates);
+    console.log(Object.entries(this.state.allRates))
   };
+
+  const rateList = Object.entries(this.state.allRates);
+
+  const rateListEntries = rateList.map(entry => <li>{entry}</li>);
+
 
   render () {
     console.log(this.state);
@@ -149,7 +155,7 @@ class MyApp extends Component {
         </div>
         <h2>Exchange Rates For</h2>
         <CurrencyMenu onChange={this.handleBaseCurrChange} value={this.state.baseCurrency} />
-        <ul></ul>
+        <ul>{this.rateListEntries}</ul>
       </div>
     );
   };
