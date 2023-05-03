@@ -150,7 +150,12 @@ class MyApp extends Component {
         </div>
         <h2>Exchange Rates For</h2>
         <CurrencyMenu onChange={this.handleBaseCurrChange} value={this.state.baseCurrency} />
-        <ul>{Object.entries(this.state.allRates).map(entry => <li>{entry}</li>)}</ul>
+        <ul className="list-unstyled">{Object.entries(this.state.allRates).map(entry => <li>{entry}</li>)}</ul>
+        <div>
+      <a href="https://www.linkedin.com/in/adam-chan-157bbb202/">
+        <img className="width-40px height-auto" src={require("./images/linkinlogo.png")}  />
+      </a>
+    </div>
       </div>
     );
   };
