@@ -127,11 +127,6 @@ class MyApp extends Component {
     console.log(Object.entries(this.state.allRates))
   };
 
-  const rateList = Object.entries(this.state.allRates);
-
-  const rateListEntries = rateList.map(entry => <li>{entry}</li>);
-
-
   render () {
     console.log(this.state);
     return (
@@ -155,7 +150,7 @@ class MyApp extends Component {
         </div>
         <h2>Exchange Rates For</h2>
         <CurrencyMenu onChange={this.handleBaseCurrChange} value={this.state.baseCurrency} />
-        <ul>{this.rateListEntries}</ul>
+        <ul>{Object.entries(this.state.allRates).map(entry => <li>{entry}</li>)}</ul>
       </div>
     );
   };
