@@ -47,7 +47,7 @@ class MyApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstCurrency: "GBP",
+      firstCurrency: "NZD",
       secondCurrency: "EUR",
       rates: { EUR: 1 },
       firstAmount: 1,
