@@ -1,5 +1,8 @@
 import './App.css';
+import React from 'react';
 import { Component } from 'react';
+import Chart from 'chart.js/auto';
+import { checkStatus, json } from './utils/fetchUtils';
 
 function CurrencyMenu(props) {
   const { onChange, value } = props;
@@ -60,11 +63,13 @@ class MyApp extends Component {
     this.handleFirstAmountChange = this.handleFirstAmountChange.bind(this);
     this.handleSecondAmountChange = this.handleSecondAmountChange.bind(this);
     this.handleBaseCurrChange = this.handleBaseCurrChange.bind(this);
+    this.chartRef = React.createRef();
   };
 
   componentDidMount () {
     this.getRate();
     this.getAllRates();
+    this.getHistoricalRates();
   }
 
   getRate = () => {
@@ -88,6 +93,24 @@ class MyApp extends Component {
     });
   };
 
+  getHistoricalRates = () => {
+    const endDate = new Date().toISOString().split('T')[0];
+    const startDate = new Date((new Date).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
+    fetch(`https://api.frankfurter.app/${startDate}..${endDate}?from=${this.state.firstCurrency}&to=${this.state.secondCurrency}`)
+      .then(checkStatus)
+      .then(json)
+      .then(data => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        const chartLabels = Object.keys(data.rates);
+        const chartData = Object.values(data.rates).map(rate => rate[this.state.secondCurrency]);
+        const chartLabel = `${this.state.firstCurrency}/${this.state.secondCurrency}`;
+        this.buildChart(chartLabels, chartData, chartLabel);
+      })
+      .catch(error => console.error(error.message));
+  }
+
   convertBaseToQuote = (base, rate) => {
     return base * rate;
   }
@@ -98,13 +121,13 @@ class MyApp extends Component {
 
   handleFirstCurrChange = (event) => {
     this.setState({ firstCurrency: event.target.value }, this.getRate);
-
+    this.getHistoricalRates();
   };
 
   handleSecondCurrChange = (event) => {
     this.setState({ secondCurrency: event.target.value }, this.getRate);
-
-  };
+    this.getHistoricalRates();
+};
 
   handleFirstAmountChange = (event) => {
     this.setState({
@@ -127,6 +150,30 @@ class MyApp extends Component {
     console.log(Object.entries(this.state.allRates))
   };
 
+  buildChart = (labels, data, label) => {
+    const chartRef = this.chartRef.current.getContext("2d");
+    if (typeof this.chart !== "undefined") {
+      this.chart.destroy();
+    }
+    this.chart = new Chart(this.chartRef.current.getContext("2d"), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: label,
+            data,
+            fill: false,
+            tension: 0,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+      }
+    })
+  }
+
   render () {
     console.log(this.state);
     return (
@@ -148,6 +195,7 @@ class MyApp extends Component {
           <input value={this.state.secondAmount} onChange={this.handleSecondAmountChange} type="number"/>
           <span className="ml-3">{this.state.secondCurrency}</span>
         </div>
+        <canvas ref={this.chartRef} />
         <h2>Exchange Rates For</h2>
         <CurrencyMenu onChange={this.handleBaseCurrChange} value={this.state.baseCurrency} />
         <ul className="list-unstyled">{Object.entries(this.state.allRates).map(entry => <li>{entry}</li>)}</ul>
