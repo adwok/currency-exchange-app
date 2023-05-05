@@ -120,14 +120,18 @@ class MyApp extends Component {
   }
 
   handleFirstCurrChange = (event) => {
-    this.setState({ firstCurrency: event.target.value }, this.getRate);
-    this.getHistoricalRates();
+    this.setState({ firstCurrency: event.target.value }, () => {
+      this.getRate();
+      this.getHistoricalRates();
+    });
   };
 
   handleSecondCurrChange = (event) => {
-    this.setState({ secondCurrency: event.target.value }, this.getRate);
-    this.getHistoricalRates();
-};
+    this.setState({ secondCurrency: event.target.value }, () => {
+      this.getRate();
+      this.getHistoricalRates();
+    });
+  };
 
   handleFirstAmountChange = (event) => {
     this.setState({
