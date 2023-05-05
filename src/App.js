@@ -120,13 +120,17 @@ class MyApp extends Component {
   }
 
   handleFirstCurrChange = (event) => {
-    this.setState({ firstCurrency: event.target.value }, this.getRate);
-    this.getHistoricalRates();
+    this.setState({ firstCurrency: event.target.value }, () => {
+      this.getRate();
+      this.getHistoricalRates();
+    });
   };
 
   handleSecondCurrChange = (event) => {
-    this.setState({ secondCurrency: event.target.value }, this.getRate);
-    this.getHistoricalRates();
+    this.setState({ secondCurrency: event.target.value }, () => {
+      this.getRate();
+      this.getHistoricalRates();
+    });
 };
 
   handleFirstAmountChange = (event) => {
@@ -198,7 +202,7 @@ class MyApp extends Component {
         <canvas ref={this.chartRef} />
         <h2>Exchange Rates For</h2>
         <CurrencyMenu onChange={this.handleBaseCurrChange} value={this.state.baseCurrency} />
-        <ul className="list-unstyled">{Object.entries(this.state.allRates).map(entry => <li>{entry}</li>)}</ul>
+        <ul className="list-unstyled">{Object.entries(this.state.allRates).map(entry => <li key={entry}>{entry}</li>)}</ul>
         <div>
       <a href="https://www.linkedin.com/in/adam-chan-157bbb202/">
         <img className="width-40px height-auto" src={require("./images/linkinlogo.png")}  />
